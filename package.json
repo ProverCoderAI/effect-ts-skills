@@ -7,6 +7,7 @@
   "scripts": {
     "check": "pnpm run lint && pnpm run test && pnpm --filter @prover-coder-ai/effect-ts-check run check",
     "lint": "pnpm --filter @prover-coder-ai/effect-ts-check run lint",
+    "sync:skill-asset": "bash skills/effect-ts-guide/scripts/refresh-effect-ts-check-asset.sh",
     "test": "pnpm --filter @prover-coder-ai/effect-ts-check run test"
   }
 }

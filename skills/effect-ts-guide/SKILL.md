@@ -23,7 +23,7 @@ If the task is not about Effect, do not force this skill.
 2. Run the quick compliance check first:
 
 ```bash
-npx @prover-coder-ai/effect-ts-check .
+bash "${CODEX_HOME:-$HOME/.codex}/skills/effect-ts-guide/scripts/run-effect-ts-check.sh" .
 ```
 
 3. Fix the violations that are machine-detectable.
@@ -31,6 +31,8 @@ npx @prover-coder-ai/effect-ts-check .
 5. Re-run the check before finishing.
 
 For editor integration tasks, treat `effect-ts-check` as the reusable CLI/compliance package and `@effect/language-service` plus VSCode settings/extensions as a separate setup concern.
+
+The skill is intentionally self-contained for local use: `bash "${CODEX_HOME:-$HOME/.codex}/skills/effect-ts-guide/scripts/run-effect-ts-check.sh" .` resolves the bundled tarball from the installed skill directory, so the agent does not need an npm-published package to run the first compliance step.
 
 ## What The Check Covers
 

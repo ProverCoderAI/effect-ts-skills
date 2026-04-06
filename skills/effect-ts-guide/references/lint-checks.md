@@ -5,8 +5,10 @@
 Run this first:
 
 ```bash
-npx @prover-coder-ai/effect-ts-check .
+bash "${CODEX_HOME:-$HOME/.codex}/skills/effect-ts-guide/scripts/run-effect-ts-check.sh" .
 ```
+
+This wrapper resolves the bundled `effect-ts-check` tarball from the installed skill directory, so local skill installs work before npm publish.
 
 ## Minimal Profile
 
