@@ -37,3 +37,7 @@ test("strict adds import and type policy", async () => {
   assert.ok(ruleIds.includes("@typescript-eslint/no-explicit-any"))
   assert.ok(ruleIds.includes("no-console"))
 })
+
+test("strict includes additional effect-eslint preset layers", () => {
+  assert.ok(strict.length > minimal.length)
+})

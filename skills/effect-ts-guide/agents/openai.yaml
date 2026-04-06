@@ -1,7 +1,7 @@
 interface:
   display_name: "Effect TS Guide"
-  short_description: "Effect-TS guidance, review, and checks"
-  default_prompt: "Use $effect-ts-guide for Effect-TS implementation or review tasks, start with `npx @prover-coder-ai/effect-ts-check .`, and then apply the manual rules for architecture and typed-effect code."
+  short_description: "Effect-TS guidance, checks, and editor setup"
+  default_prompt: "Use $effect-ts-guide for Effect-TS implementation, review, or editor setup tasks, start with `npx @prover-coder-ai/effect-ts-check .` for compliance, and treat `@effect/language-service` and VSCode integration as a separate authoring layer."
 
 policy:
   allow_implicit_invocation: true

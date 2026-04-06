@@ -24,11 +24,18 @@ The minimal profile should catch the high-signal Effect violations:
 
 The strict profile should add deeper policy checks:
 
+- the official `@effect/eslint-plugin` preset
 - shell-only boundaries for runtime execution
 - no direct CORE imports from SHELL
 - safer handling around casts and `unknown`
 - stricter host API restrictions
 - eslint comment hygiene
+
+## Editor Tooling Boundary
+
+- `effect-ts-check` is the reusable command-line compliance layer.
+- `@effect/language-service` and VSCode settings belong to the editor experience layer.
+- Do not expect the CLI to provide completion or hover behavior; that comes from the language service.
 
 ## How To Use Results
 

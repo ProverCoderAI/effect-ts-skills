@@ -1,10 +1,10 @@
-export { minimal } from "./minimal.mjs"
-export { strict } from "./strict.mjs"
+export { minimal } from "./minimal.mjs";
 export {
-  effectRestrictedImports,
   effectRestrictedImportPatterns,
-  effectSyntaxRestrictions,
+  effectRestrictedImports,
   effectStrictSyntaxRestrictions,
-  effectTypeRules
-} from "./rules/index.mjs"
-export { getProfileConfig, lintPaths, main, parseArguments } from "./run.mjs"
+  effectSyntaxRestrictions,
+  effectTypeRules,
+} from "./rules/index.mjs";
+export { getProfileConfig, lintPaths, main, parseArguments } from "./run.mjs";
+export { strict } from "./strict.mjs";

@@ -30,3 +30,9 @@ Only apply this skill when the task is explicitly Effect-related.
 - Be concrete about what should change.
 - Prefer minimal diffs.
 - Explain why a change preserves purity, typing, or boundary safety.
+
+## Editor Integration Rules
+
+- When the user asks about Effect editor support, mention both `@effect/language-service` and the VSCode extension.
+- Keep the explanation split between reusable compliance tooling and editor authoring setup.
+- If a repo already has CLI checks, do not imply the language service replaces them.

@@ -1,8 +1,8 @@
-import tseslint from "typescript-eslint"
+import tseslint from "typescript-eslint";
 
-import { effectSyntaxRestrictions } from "./rules/index.mjs"
+import { effectSyntaxRestrictions } from "./rules/index.mjs";
 
-export const effectFileGlobs = Object.freeze(["**/*.{js,mjs,cjs,ts,tsx}"])
+export const effectFileGlobs = Object.freeze(["**/*.{js,mjs,cjs,ts,tsx}"]);
 
 export const effectBaseConfig = Object.freeze([
   {
@@ -12,13 +12,13 @@ export const effectBaseConfig = Object.freeze([
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
-      parser: tseslint.parser
+      parser: tseslint.parser,
     },
     plugins: {
-      "@typescript-eslint": tseslint.plugin
+      "@typescript-eslint": tseslint.plugin,
     },
     rules: {
-      "no-restricted-syntax": ["error", ...effectSyntaxRestrictions]
-    }
-  }
-])
+      "no-restricted-syntax": ["error", ...effectSyntaxRestrictions],
+    },
+  },
+]);

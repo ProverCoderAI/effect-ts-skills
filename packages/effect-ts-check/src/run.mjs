@@ -1,54 +1,54 @@
-import { ESLint } from "eslint"
+import { ESLint } from "eslint";
 
-import { minimal } from "./minimal.mjs"
-import { strict } from "./strict.mjs"
+import { minimal } from "./minimal.mjs";
+import { strict } from "./strict.mjs";
 
 export function parseArguments(argv) {
   const result = {
     profile: "minimal",
     targets: [],
-    help: false
-  }
+    help: false,
+  };
 
   for (let index = 0; index < argv.length; index += 1) {
-    const value = argv[index]
+    const value = argv[index];
 
     if (value === "--help" || value === "-h") {
-      result.help = true
-      continue
+      result.help = true;
+      continue;
     }
 
     if (value === "--profile" || value === "-p") {
-      result.profile = argv[index + 1] ?? "minimal"
-      index += 1
-      continue
+      result.profile = argv[index + 1] ?? "minimal";
+      index += 1;
+      continue;
     }
 
     if (value.startsWith("--profile=")) {
-      result.profile = value.slice("--profile=".length)
-      continue
+      result.profile = value.slice("--profile=".length);
+      continue;
     }
 
-    result.targets.push(value)
+    result.targets.push(value);
   }
 
   if (result.targets.length === 0) {
-    result.targets.push(".")
+    result.targets.push(".");
   }
 
-  return result
+  return result;
 }
 
 export function getProfileConfig(profile) {
   if (profile === "strict") {
-    return strict
+    return strict;
   }
 
   if (profile === "minimal") {
-    return minimal
+    return minimal;
   }
 
-  throw new Error(`Unknown profile: ${profile}`)
+  throw new Error(`Unknown profile: ${profile}`);
 }
 
 export function printUsage() {
@@ -61,50 +61,50 @@ export function printUsage() {
       "Profiles:",
       "  minimal  Default fast effect compliance check.",
       "  strict   Adds import/type/runtime policy checks.",
-      ""
-    ].join("\n")
-  )
+      "",
+    ].join("\n"),
+  );
 }
 
 export async function lintPaths({ profile, targets }) {
   const eslint = new ESLint({
     overrideConfigFile: true,
-    overrideConfig: getProfileConfig(profile)
-  })
+    overrideConfig: getProfileConfig(profile),
+  });
 
-  const results = await eslint.lintFiles(targets)
-  const formatter = await eslint.loadFormatter("stylish")
-  const output = formatter.format(results)
+  const results = await eslint.lintFiles(targets);
+  const formatter = await eslint.loadFormatter("stylish");
+  const output = formatter.format(results);
 
   if (output.trim().length > 0) {
-    process.stdout.write(output.endsWith("\n") ? output : `${output}\n`)
+    process.stdout.write(output.endsWith("\n") ? output : `${output}\n`);
   }
 
   const errorCount = results.reduce(
     (total, result) => total + result.errorCount + result.fatalErrorCount,
-    0
-  )
+    0,
+  );
 
   return {
     errorCount,
-    results
-  }
+    results,
+  };
 }
 
 export async function main(argv = process.argv.slice(2)) {
-  const parsed = parseArguments(argv)
+  const parsed = parseArguments(argv);
 
   if (parsed.help) {
-    printUsage()
-    return 0
+    printUsage();
+    return 0;
   }
 
   try {
-    const { errorCount } = await lintPaths(parsed)
-    return errorCount > 0 ? 1 : 0
+    const { errorCount } = await lintPaths(parsed);
+    return errorCount > 0 ? 1 : 0;
   } catch (error) {
-    const message = error instanceof Error ? error.stack ?? error.message : String(error)
-    process.stderr.write(`${message}\n`)
-    return 2
+    const message = error instanceof Error ? error.stack ?? error.message : String(error);
+    process.stderr.write(`${message}\n`);
+    return 2;
   }
 }

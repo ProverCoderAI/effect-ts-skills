@@ -15,3 +15,4 @@
 
 - Prefer Effect platform services over host APIs.
 - Use host APIs only when no Effect replacement is needed and the boundary is already isolated.
+- Editor tooling such as `@effect/language-service` is not a runtime replacement for host APIs; it only improves authoring feedback.

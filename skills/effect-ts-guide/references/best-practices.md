@@ -40,3 +40,9 @@
 - Write tests as Effects.
 - Use test layers and mocks.
 - Add property-based tests when a rule should hold for many inputs.
+
+## Editor Setup
+
+- Use `@effect/language-service` in `tsconfig.base.json` for editor diagnostics and Effect-aware suggestions.
+- Recommend the Effect VSCode extension alongside ESLint, but treat it as authoring support rather than a runtime or CI dependency.
+- Keep the editor language service separate from the reusable CLI compliance package.

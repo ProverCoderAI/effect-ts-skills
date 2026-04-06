@@ -1,5 +1,5 @@
-import { effectBaseConfig } from "./base.mjs"
+import { effectBaseConfig } from "./base.mjs";
 
-export const minimal = effectBaseConfig
+export const minimal = effectBaseConfig;
 
-export default minimal
+export default minimal;

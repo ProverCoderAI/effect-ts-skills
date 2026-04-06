@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-import { main } from "./run.mjs"
+import { main } from "./run.mjs";
 
-const result = main()
+const result = main();
 
 if (typeof result === "number") {
-  process.exitCode = result
+  process.exitCode = result;
 } else {
   result.then((exitCode) => {
-    process.exitCode = exitCode
-  })
+    process.exitCode = exitCode;
+  });
 }

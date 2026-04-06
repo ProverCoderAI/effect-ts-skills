@@ -1,15 +1,17 @@
-import tseslint from "typescript-eslint"
+import * as effectEslint from "@effect/eslint-plugin";
+import tseslint from "typescript-eslint";
 
-import { effectBaseConfig } from "./base.mjs"
+import { effectBaseConfig } from "./base.mjs";
 import {
   effectRestrictedImportPatterns,
   effectRestrictedImports,
   effectStrictSyntaxRestrictions,
-  effectTypeRules
-} from "./rules/index.mjs"
+  effectTypeRules,
+} from "./rules/index.mjs";
 
 export const strict = [
   ...effectBaseConfig,
+  ...effectEslint.configs.dprint,
   {
     name: "effect-ts-check/strict",
     ignores: ["tests/**"],
@@ -17,10 +19,10 @@ export const strict = [
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
-      parser: tseslint.parser
+      parser: tseslint.parser,
     },
     plugins: {
-      "@typescript-eslint": tseslint.plugin
+      "@typescript-eslint": tseslint.plugin,
     },
     rules: {
       "no-console": "error",
@@ -28,13 +30,13 @@ export const strict = [
         "error",
         {
           paths: effectRestrictedImports,
-          patterns: effectRestrictedImportPatterns
-        }
+          patterns: effectRestrictedImportPatterns,
+        },
       ],
       "no-restricted-syntax": ["error", ...effectStrictSyntaxRestrictions],
-      ...effectTypeRules
-    }
-  }
-]
+      ...effectTypeRules,
+    },
+  },
+];
 
-export default strict
+export default strict;

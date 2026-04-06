@@ -1,3 +1,3 @@
-export { effectSyntaxRestrictions, effectStrictSyntaxRestrictions } from "./syntax.mjs"
-export { effectRestrictedImports, effectRestrictedImportPatterns } from "./imports.mjs"
-export { effectTypeRules } from "./types.mjs"
+export { effectRestrictedImportPatterns, effectRestrictedImports } from "./imports.mjs";
+export { effectStrictSyntaxRestrictions, effectSyntaxRestrictions } from "./syntax.mjs";
+export { effectTypeRules } from "./types.mjs";
