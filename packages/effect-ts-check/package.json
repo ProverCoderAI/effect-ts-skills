@@ -1,0 +1,48 @@
+{
+  "name": "@prover-coder-ai/effect-ts-check",
+  "version": "0.1.0",
+  "description": "Reusable Effect-TS compliance config and CLI",
+  "type": "module",
+  "private": false,
+  "license": "ISC",
+  "bin": {
+    "effect-ts-check": "./src/cli.mjs"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.mjs"
+    },
+    "./minimal": {
+      "import": "./src/minimal.mjs"
+    },
+    "./strict": {
+      "import": "./src/strict.mjs"
+    },
+    "./rules": {
+      "import": "./src/rules/index.mjs"
+    },
+    "./cli": {
+      "import": "./src/cli.mjs"
+    }
+  },
+  "files": [
+    "src"
+  ],
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "check": "node src/cli.mjs src/index.mjs",
+    "lint": "node src/cli.mjs src --profile strict",
+    "lint:strict": "node src/cli.mjs . --profile strict",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@eslint/js": "^10.0.0",
+    "eslint": "^10.0.0",
+    "typescript-eslint": "^8.57.1"
+  }
+}
