@@ -1,0 +1,38 @@
+{
+  "name": "effect-ts-skills",
+  "version": "0.1.0",
+  "description": "Effect-TS skill and bundled compliance tooling for Codex.",
+  "author": {
+    "name": "ProverCoderAI",
+    "url": "https://github.com/ProverCoderAI"
+  },
+  "homepage": "https://github.com/ProverCoderAI/effect-ts-skills",
+  "repository": "https://github.com/ProverCoderAI/effect-ts-skills",
+  "license": "ISC",
+  "keywords": [
+    "effect",
+    "effect-ts",
+    "typescript",
+    "eslint",
+    "skills",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Effect TS Skills",
+    "shortDescription": "Effect-TS skill and compliance checks",
+    "longDescription": "Installable Codex plugin that bundles the effect-ts-guide skill together with the effect-ts-check compliance CLI.",
+    "developerName": "ProverCoderAI",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/ProverCoderAI/effect-ts-skills",
+    "defaultPrompt": [
+      "Review this repo for Effect-TS compliance.",
+      "Wire Effect editor tooling for this project.",
+      "Run the bundled Effect-TS skill on this codebase."
+    ]
+  }
+}

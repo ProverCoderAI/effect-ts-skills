@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+dist/
+coverage/
+.tmp/
+scripts
+!skills/effect-ts-guide/scripts/
+!skills/effect-ts-guide/scripts/*.sh

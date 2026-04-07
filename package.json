@@ -1,0 +1,15 @@
+{
+  "name": "effect-ts-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reusable Effect-TS skills and compliance tooling",
+  "packageManager": "pnpm@10.32.1",
+  "scripts": {
+    "check": "pnpm run lint && pnpm run test && pnpm --filter @prover-coder-ai/effect-ts-check run check && pnpm run validate:distribution && pnpm run check:skill",
+    "check:skill": "pnpm run sync:skill-asset && bash skills/effect-ts-guide/scripts/run-effect-ts-check.sh .",
+    "lint": "pnpm --filter @prover-coder-ai/effect-ts-check run lint",
+    "sync:skill-asset": "bash skills/effect-ts-guide/scripts/refresh-effect-ts-check-asset.sh",
+    "test": "pnpm --filter @prover-coder-ai/effect-ts-check run test",
+    "validate:distribution": "node tools/validate-distribution.mjs"
+  }
+}
