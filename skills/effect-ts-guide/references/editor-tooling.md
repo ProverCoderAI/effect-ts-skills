@@ -3,7 +3,7 @@
 ## Scope
 
 - `@prover-coder-ai/effect-ts-check` is the reusable CLI/compliance package.
-- `"${CODEX_HOME:-$HOME/.codex}/skills/effect-ts-guide/scripts/run-effect-ts-check.sh"` is the self-contained skill entrypoint for running that package before npm publish.
+- `scripts/run-effect-ts-check.sh` is the self-contained skill entrypoint for running that package before npm publish.
 - `@effect/language-service` is the editor-facing TypeScript plugin for Effect-aware diagnostics and suggestions.
 - VSCode integration is a separate setup layer, not part of the CLI package.
 

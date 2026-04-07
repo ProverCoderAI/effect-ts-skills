@@ -1,7 +1,7 @@
 import * as effectEslint from "@effect/eslint-plugin";
 import tseslint from "typescript-eslint";
 
-import { effectBaseConfig } from "./base.mjs";
+import { effectBaseConfig, effectFileGlobs } from "./base.mjs";
 import {
   effectRestrictedImportPatterns,
   effectRestrictedImports,
@@ -14,8 +14,7 @@ export const strict = [
   ...effectEslint.configs.dprint,
   {
     name: "effect-ts-check/strict",
-    ignores: ["tests/**"],
-    files: ["**/*.{js,mjs,cjs,ts,tsx}"],
+    files: effectFileGlobs,
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",

@@ -1,30 +1,20 @@
 ---
 name: effect-ts-guide
-description: Effect-TS guidance for architecture, typed errors, Layers, boundary validation, resource safety, compliance checks, and editor tooling. Use when a task is explicitly about Effect, @effect/*, refactoring code to Effect, reviewing Effect code, validating Effect-style conventions, or wiring Effect editor/language-service setup.
+description: Effect-TS guidance for architecture, typed errors, Layers, boundary validation, resource safety, compliance checks, and editor tooling. Use when a task is explicitly about reviewing or implementing Effect or @effect/* application and library code, refactoring code to Effect, validating Effect-style conventions, or wiring Effect editor/language-service setup. Do not use for generic package publishing or plugin scaffolding tasks unless the code under review is the Effect code itself.
 ---
 
 # Effect TS Guide
 
-## When To Use
-
-Use this skill only when the task is clearly Effect-related:
-
-- the code uses `effect` or `@effect/*`
-- the user asks to refactor to Effect
-- the user asks for an Effect review or compliance check
-- the user asks about Effect editor support, language service setup, or VSCode integration
-- the task needs typed errors, Layers, scoped resources, or boundary decoding
-
-If the task is not about Effect, do not force this skill.
-
 ## Workflow
 
-1. Confirm the codebase or request is actually Effect-oriented.
+1. Confirm the codebase or request is actually Effect-oriented. If it is not, stop and do not force this skill.
 2. Run the quick compliance check first:
 
 ```bash
-bash "${CODEX_HOME:-$HOME/.codex}/skills/effect-ts-guide/scripts/run-effect-ts-check.sh" .
+bash scripts/run-effect-ts-check.sh .
 ```
+
+If the repository is mostly tooling, docs, or test fixtures for the checker itself, scope the command to the relevant Effect source directories instead of blindly linting the whole workspace.
 
 3. Fix the violations that are machine-detectable.
 4. Apply the manual rules from the references for architecture and style decisions.
@@ -32,7 +22,7 @@ bash "${CODEX_HOME:-$HOME/.codex}/skills/effect-ts-guide/scripts/run-effect-ts-c
 
 For editor integration tasks, treat `effect-ts-check` as the reusable CLI/compliance package and `@effect/language-service` plus VSCode settings/extensions as a separate setup concern.
 
-The skill is intentionally self-contained for local use: `bash "${CODEX_HOME:-$HOME/.codex}/skills/effect-ts-guide/scripts/run-effect-ts-check.sh" .` resolves the bundled tarball from the installed skill directory, so the agent does not need an npm-published package to run the first compliance step.
+The skill is intentionally self-contained. Resolve `scripts/run-effect-ts-check.sh` relative to the skill directory so the same instructions work for standalone installs, repo-local skills, and plugin-contributed skills without hardcoding `~/.codex`.
 
 ## What The Check Covers
 

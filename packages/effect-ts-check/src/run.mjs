@@ -51,6 +51,27 @@ export function getProfileConfig(profile) {
   throw new Error(`Unknown profile: ${profile}`);
 }
 
+function resolveProfileConfig(profile) {
+  if (profile === "strict") {
+    return {
+      ok: true,
+      config: strict,
+    };
+  }
+
+  if (profile === "minimal") {
+    return {
+      ok: true,
+      config: minimal,
+    };
+  }
+
+  return {
+    ok: false,
+    message: `Unknown profile: ${profile}`,
+  };
+}
+
 export function printUsage() {
   process.stdout.write(
     [
@@ -66,32 +87,41 @@ export function printUsage() {
   );
 }
 
-export async function lintPaths({ profile, targets }) {
-  const eslint = new ESLint({
-    overrideConfigFile: true,
-    overrideConfig: getProfileConfig(profile),
+function formatResults(eslint, results) {
+  return eslint.loadFormatter("stylish").then((formatter) => {
+    const output = formatter.format(results);
+
+    if (output.trim().length > 0) {
+      process.stdout.write(output.endsWith("\n") ? output : `${output}\n`);
+    }
+
+    const errorCount = results.reduce(
+      (total, result) => total + result.errorCount + result.fatalErrorCount,
+      0,
+    );
+
+    return {
+      errorCount,
+      results,
+    };
   });
-
-  const results = await eslint.lintFiles(targets);
-  const formatter = await eslint.loadFormatter("stylish");
-  const output = formatter.format(results);
-
-  if (output.trim().length > 0) {
-    process.stdout.write(output.endsWith("\n") ? output : `${output}\n`);
-  }
-
-  const errorCount = results.reduce(
-    (total, result) => total + result.errorCount + result.fatalErrorCount,
-    0,
-  );
-
-  return {
-    errorCount,
-    results,
-  };
 }
 
-export async function main(argv = process.argv.slice(2)) {
+export function lintPaths({ profile, targets }) {
+  const resolvedProfile = resolveProfileConfig(profile);
+  const eslint = new ESLint({
+    overrideConfigFile: true,
+    overrideConfig: resolvedProfile.ok ? resolvedProfile.config : getProfileConfig(profile),
+  });
+
+  return eslint.lintFiles(targets).then((results) => formatResults(eslint, results));
+}
+
+function formatFailure(error) {
+  return error instanceof Error ? error.stack ?? error.message : String(error);
+}
+
+export function main(argv = process.argv.slice(2)) {
   const parsed = parseArguments(argv);
 
   if (parsed.help) {
@@ -99,12 +129,18 @@ export async function main(argv = process.argv.slice(2)) {
     return 0;
   }
 
-  try {
-    const { errorCount } = await lintPaths(parsed);
-    return errorCount > 0 ? 1 : 0;
-  } catch (error) {
-    const message = error instanceof Error ? error.stack ?? error.message : String(error);
-    process.stderr.write(`${message}\n`);
+  const resolvedProfile = resolveProfileConfig(parsed.profile);
+
+  if (!resolvedProfile.ok) {
+    process.stderr.write(`${resolvedProfile.message}\n`);
     return 2;
   }
+
+  return lintPaths(parsed).then(
+    ({ errorCount }) => (errorCount > 0 ? 1 : 0),
+    (error) => {
+      process.stderr.write(`${formatFailure(error)}\n`);
+      return 2;
+    },
+  );
 }

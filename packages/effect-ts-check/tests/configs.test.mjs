@@ -6,8 +6,9 @@ import { lintSnippet } from "./helpers.mjs"
 
 test("minimal exports a flat config array", () => {
   assert.ok(Array.isArray(minimal))
-  assert.equal(minimal[0].name, "effect-ts-check/base")
-  assert.equal(minimal[0].rules["no-restricted-syntax"][0], "error")
+  const baseEntry = minimal.find((entry) => entry.name === "effect-ts-check/base")
+  assert.ok(baseEntry)
+  assert.equal(baseEntry.rules["no-restricted-syntax"][0], "error")
 })
 
 test("minimal rejects effect-unsafe syntax", async () => {
@@ -40,4 +41,22 @@ test("strict adds import and type policy", async () => {
 
 test("strict includes additional effect-eslint preset layers", () => {
   assert.ok(strict.length > minimal.length)
+})
+
+test("minimal ignores nested tests and fixtures", async () => {
+  const [testResult] = await lintSnippet(
+    minimal,
+    "async function demo() { await Promise.resolve(1) }",
+    "packages/demo/tests/nested.test.js"
+  )
+  const [fixtureResult] = await lintSnippet(
+    minimal,
+    "async function demo() { await Promise.resolve(1) }",
+    "packages/demo/tests/fixtures/fail.js"
+  )
+
+  assert.equal(testResult.errorCount, 0)
+  assert.equal(fixtureResult.errorCount, 0)
+  assert.ok(testResult.messages.every((message) => message.ruleId !== "no-restricted-syntax"))
+  assert.ok(fixtureResult.messages.every((message) => message.ruleId !== "no-restricted-syntax"))
 })

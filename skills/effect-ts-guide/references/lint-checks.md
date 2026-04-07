@@ -5,10 +5,12 @@
 Run this first:
 
 ```bash
-bash "${CODEX_HOME:-$HOME/.codex}/skills/effect-ts-guide/scripts/run-effect-ts-check.sh" .
+bash scripts/run-effect-ts-check.sh .
 ```
 
-This wrapper resolves the bundled `effect-ts-check` tarball from the installed skill directory, so local skill installs work before npm publish.
+Resolve `scripts/run-effect-ts-check.sh` relative to the skill directory. The wrapper resolves the bundled `effect-ts-check` tarball without assuming a specific install location such as `~/.codex`.
+
+If the repository is mostly tooling, docs, or test fixtures for the checker itself, run the command only against the relevant Effect source paths instead of `.`.
 
 ## Minimal Profile
 
