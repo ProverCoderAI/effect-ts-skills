@@ -18,6 +18,9 @@
     "codex"
   ],
   "skills": "./skills/",
+  "installPaths": [
+    "skills/effect-ts-guide"
+  ],
   "interface": {
     "displayName": "Effect TS Skills",
     "shortDescription": "Effect-TS skill and compliance checks",
