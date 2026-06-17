@@ -185,18 +185,27 @@ function assertLintCheckDocs() {
     "`unknown`",
     "`fetch`",
     "host API restrictions",
+    "CORE/SHELL",
   ]) {
     if (!strictSection.includes(expected)) {
       fail(`Strict profile docs must mention ${expected}`)
     }
   }
 
+  if (!contents.includes("## Strict Format Profile")) {
+    fail("Lint docs must document strict-format profile")
+  }
+
+  if (!contents.includes("@effect/dprint")) {
+    fail("Lint docs must mention strict-format dprint behavior")
+  }
+
   if (!contents.includes("Runtime execution boundaries")) {
     fail("Lint docs must call runtime execution boundaries manual review")
   }
 
-  if (!contents.includes("CORE/SHELL import direction")) {
-    fail("Lint docs must call CORE/SHELL import direction manual review")
+  if (!contents.includes("CORE must not import from SHELL")) {
+    fail("Lint docs must document machine-checked CORE/SHELL import direction")
   }
 }
 

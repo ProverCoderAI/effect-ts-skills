@@ -2,6 +2,7 @@ import { ESLint } from "eslint";
 
 import { minimal } from "./minimal.mjs";
 import { strict } from "./strict.mjs";
+import { strictFormat } from "./strict-format.mjs";
 
 export function parseArguments(argv) {
   const result = {
@@ -40,6 +41,10 @@ export function parseArguments(argv) {
 }
 
 export function getProfileConfig(profile) {
+  if (profile === "strict-format") {
+    return strictFormat;
+  }
+
   if (profile === "strict") {
     return strict;
   }
@@ -52,6 +57,13 @@ export function getProfileConfig(profile) {
 }
 
 function resolveProfileConfig(profile) {
+  if (profile === "strict-format") {
+    return {
+      ok: true,
+      config: strictFormat,
+    };
+  }
+
   if (profile === "strict") {
     return {
       ok: true,
@@ -78,10 +90,13 @@ export function printUsage() {
       "Usage:",
       "  effect-ts-check [paths...]",
       "  effect-ts-check --profile strict [paths...]",
+      "  effect-ts-check --profile strict-format [paths...]",
       "",
       "Profiles:",
       "  minimal  Default fast effect compliance check.",
-      "  strict   Adds import/type/host API policy checks.",
+      "  strict   Adds import/type/host API and Effect boundary policy checks.",
+      "  strict-format",
+      "           Runs strict plus the official @effect/dprint formatting preset.",
       "",
     ].join("\n"),
   );
