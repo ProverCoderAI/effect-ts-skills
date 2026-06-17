@@ -1,7 +1,7 @@
 {
-  "name": "ProverCoderAI",
+  "name": "effect-ts-skills",
   "interface": {
-    "displayName": "ProverCoderAI"
+    "displayName": "Effect TS Skills"
   },
   "plugins": [
     {

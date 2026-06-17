@@ -91,7 +91,7 @@ function assertMarketplace() {
   assertPathExists(marketplacePath, "Repo plugin marketplace")
   const marketplace = readJson(marketplacePath)
 
-  if (marketplace.name !== "ProverCoderAI") {
+  if (marketplace.name !== "effect-ts-skills") {
     fail(`Unexpected marketplace name: ${marketplace.name}`)
   }
 
