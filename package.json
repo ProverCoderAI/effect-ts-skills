@@ -6,11 +6,10 @@
   "packageManager": "pnpm@10.32.1",
   "scripts": {
     "check": "corepack pnpm run lint && corepack pnpm run test && corepack pnpm --filter @prover-coder-ai/effect-ts-check run check && corepack pnpm run validate:distribution && corepack pnpm run check:skill",
-    "check:skill": "bash skills/effect-ts-guide/scripts/run-effect-ts-check.sh packages/effect-ts-check/src",
+    "check:skill": "bash plugins/effect-ts-skills/skills/effect-ts-guide/scripts/run-effect-ts-check.sh packages/effect-ts-check/src",
     "lint": "corepack pnpm --filter @prover-coder-ai/effect-ts-check run lint",
-    "sync:distribution": "corepack pnpm run sync:skill-asset && corepack pnpm run sync:plugin-wrapper",
-    "sync:skill-asset": "bash skills/effect-ts-guide/scripts/refresh-effect-ts-check-asset.sh",
-    "sync:plugin-wrapper": "node tools/sync-plugin-wrapper.mjs",
+    "sync:distribution": "corepack pnpm run sync:skill-asset",
+    "sync:skill-asset": "bash plugins/effect-ts-skills/skills/effect-ts-guide/scripts/refresh-effect-ts-check-asset.sh",
     "test": "corepack pnpm --filter @prover-coder-ai/effect-ts-check run test",
     "validate:distribution": "node tools/validate-distribution.mjs"
   }

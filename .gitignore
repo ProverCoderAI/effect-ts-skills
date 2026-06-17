@@ -4,5 +4,5 @@ dist/
 coverage/
 .tmp/
 scripts
-!skills/effect-ts-guide/scripts/
-!skills/effect-ts-guide/scripts/*.sh
+!plugins/effect-ts-skills/skills/effect-ts-guide/scripts/
+!plugins/effect-ts-skills/skills/effect-ts-guide/scripts/*.sh

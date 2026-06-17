@@ -1,7 +1,0 @@
-interface:
-  display_name: "Effect TS Guide"
-  short_description: "Effect-TS guidance, checks, and editor setup"
-  default_prompt: "Use $effect-ts-guide to review or implement Effect-TS code; run the bundled checker from the skill directory first."
-
-policy:
-  allow_implicit_invocation: true

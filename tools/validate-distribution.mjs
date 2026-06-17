@@ -1,10 +1,8 @@
 import {
   existsSync,
-  lstatSync,
   mkdtempSync,
   readdirSync,
   readFileSync,
-  realpathSync,
   rmSync,
   writeFileSync,
 } from "node:fs"
@@ -13,9 +11,10 @@ import { join, resolve } from "node:path"
 import { tmpdir } from "node:os"
 
 const repoRoot = resolve(new URL("..", import.meta.url).pathname)
-const pluginManifestPath = join(repoRoot, ".codex-plugin", "plugin.json")
 const marketplacePath = join(repoRoot, ".agents", "plugins", "marketplace.json")
-const skillDir = join(repoRoot, "skills", "effect-ts-guide")
+const pluginRoot = join(repoRoot, "plugins", "effect-ts-skills")
+const pluginManifestPath = join(pluginRoot, ".codex-plugin", "plugin.json")
+const skillDir = join(pluginRoot, "skills", "effect-ts-guide")
 const skillEntryPath = join(skillDir, "SKILL.md")
 const skillAgentPath = join(skillDir, "agents", "openai.yaml")
 const skillLintChecksPath = join(skillDir, "references", "lint-checks.md")
@@ -26,8 +25,6 @@ const skillAssetPath = join(
   "effect-ts-check",
   "prover-coder-ai-effect-ts-check-0.1.0.tgz",
 )
-const repoLocalSkillPath = join(repoRoot, ".agents", "skills", "effect-ts-guide")
-const repoLocalPluginPath = join(repoRoot, "plugins", "effect-ts-skills")
 const packageDir = join(repoRoot, "packages", "effect-ts-check")
 const packageSrcDir = join(packageDir, "src")
 
@@ -71,6 +68,7 @@ function assertNoUnknownPluginFields(manifest) {
 }
 
 function assertPluginManifest() {
+  assertPathExists(pluginRoot, "Plugin root")
   assertPathExists(pluginManifestPath, "Plugin manifest")
   const manifest = readJson(pluginManifestPath)
 
@@ -121,32 +119,6 @@ function assertMarketplace() {
 
   if (plugin.category !== "Developer Tools") {
     fail("Marketplace effect-ts-skills category must be Developer Tools")
-  }
-}
-
-function assertRepoLocalSkillLink() {
-  assertPathExists(repoLocalSkillPath, "Repo-local skill entry")
-
-  const stats = lstatSync(repoLocalSkillPath)
-
-  if (!stats.isSymbolicLink()) {
-    fail(`Repo-local skill entry must be a symlink: ${repoLocalSkillPath}`)
-    return
-  }
-
-  if (realpathSync(repoLocalSkillPath) !== realpathSync(skillDir)) {
-    fail(`Repo-local skill symlink must resolve to ${skillDir}`)
-  }
-}
-
-function assertRepoLocalPluginWrapper() {
-  assertPathExists(repoLocalPluginPath, "Repo-local plugin entry")
-
-  const stats = lstatSync(repoLocalPluginPath)
-
-  if (!stats.isDirectory()) {
-    fail(`Repo-local plugin entry must be a directory: ${repoLocalPluginPath}`)
-    return
   }
 }
 
@@ -249,25 +221,6 @@ function listFiles(root) {
   return entries.sort()
 }
 
-function assertTreeMatches(sourceRoot, copyRoot, description) {
-  const sourceFiles = listFiles(sourceRoot)
-  const copyFiles = listFiles(copyRoot)
-
-  if (sourceFiles.join("\n") !== copyFiles.join("\n")) {
-    fail(`${description} file list is out of sync`)
-    return
-  }
-
-  for (const file of sourceFiles) {
-    const source = readFileSync(join(sourceRoot, file))
-    const copy = readFileSync(join(copyRoot, file))
-
-    if (!source.equals(copy)) {
-      fail(`${description} is out of sync for ${file}`)
-    }
-  }
-}
-
 function stableJson(value) {
   if (Array.isArray(value)) {
     return value.map(stableJson)
@@ -291,19 +244,6 @@ function assertPackageManifestSync(extractedPackage) {
   if (JSON.stringify(source) !== JSON.stringify(bundled)) {
     fail("Bundled effect-ts-check package.json is out of sync")
   }
-}
-
-function assertPluginWrapperSync() {
-  assertTreeMatches(
-    join(repoRoot, ".codex-plugin"),
-    join(repoLocalPluginPath, ".codex-plugin"),
-    "Plugin wrapper manifest",
-  )
-  assertTreeMatches(
-    join(repoRoot, "skills"),
-    join(repoLocalPluginPath, "skills"),
-    "Plugin wrapper skills",
-  )
 }
 
 function assertTarballSync() {
@@ -375,9 +315,6 @@ function main() {
   assertPathExists(skillEntryPath, "Skill entrypoint")
   assertPathExists(skillScriptPath, "Bundled skill wrapper")
   assertPathExists(skillAssetPath, "Bundled effect-ts-check asset")
-  assertRepoLocalSkillLink()
-  assertRepoLocalPluginWrapper()
-  assertPluginWrapperSync()
   assertSkillAgentMetadata()
   assertLintCheckDocs()
   assertTarballSync()
