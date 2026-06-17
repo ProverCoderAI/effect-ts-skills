@@ -3,6 +3,12 @@ import tseslint from "typescript-eslint";
 import { effectSyntaxRestrictions } from "./rules/index.mjs";
 
 export const effectFileGlobs = Object.freeze(["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"]);
+export const effectCoreFileGlobs = Object.freeze([
+  "**/src/core/**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}",
+]);
+export const effectCoreAxiomsFileGlobs = Object.freeze([
+  "**/src/core/axioms.{ts,tsx,mts,cts}",
+]);
 export const effectIgnoreGlobs = Object.freeze([
   "tests/**",
   "**/tests/**",

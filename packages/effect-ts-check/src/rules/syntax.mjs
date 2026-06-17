@@ -29,7 +29,7 @@ export const effectSyntaxRestrictions = Object.freeze([
   },
 ]);
 
-export const effectStrictSyntaxRestrictions = Object.freeze([
+export const effectHostSyntaxRestrictions = Object.freeze([
   {
     selector: "CallExpression[callee.name='fetch']",
     message: "Use @effect/platform HttpClient instead of fetch.",
@@ -50,6 +50,9 @@ export const effectStrictSyntaxRestrictions = Object.freeze([
     selector: "CallExpression[callee.object.name='global'][callee.property.name='fetch']",
     message: "Use @effect/platform HttpClient instead of global.fetch.",
   },
+]);
+
+export const effectErrorBoundarySyntaxRestrictions = Object.freeze([
   {
     selector: "CallExpression[callee.property.name='catchAll']",
     message: "Avoid catchAll that swallows typed errors; map or rethrow explicitly.",
@@ -62,8 +65,27 @@ export const effectStrictSyntaxRestrictions = Object.freeze([
     selector: "TSTypeAssertion",
     message: "Avoid casts in product code; keep them in one axioms boundary if needed.",
   },
+]);
+
+export const effectCoreSyntaxRestrictions = Object.freeze([
   {
     selector: "TSUnknownKeyword",
     message: "Use unknown only at shell boundaries with decoding.",
   },
+  {
+    selector: "CallExpression[callee.property.name='runSyncExit']",
+    message: "Use Effect.runSyncExit only at shell/runtime boundaries.",
+  },
+  {
+    selector: "CallExpression[callee.property.name='runSync']",
+    message: "Use Effect.runSync only at shell/runtime boundaries.",
+  },
+  {
+    selector: "CallExpression[callee.property.name='runPromise']",
+    message: "Use Effect.runPromise only at shell/runtime boundaries.",
+  },
+]);
+
+export const effectStrictSyntaxRestrictions = Object.freeze([
+  ...effectHostSyntaxRestrictions,
 ]);

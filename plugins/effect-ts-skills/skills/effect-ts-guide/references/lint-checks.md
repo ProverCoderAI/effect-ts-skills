@@ -30,14 +30,31 @@ The minimal profile should catch the high-signal Effect violations:
 
 The strict profile should add deeper policy checks:
 
-- the official `@effect/eslint-plugin` preset
 - direct host imports that bypass Effect platform services
 - obvious unsafe typing policy violations
 - safer handling around casts and `unknown`
 - direct `fetch` and other host API restrictions
 - eslint comment hygiene
+- thrown-literal checks
+- path-aware CORE/SHELL boundary checks
 
-Runtime execution boundaries such as `Effect.runPromise` and CORE/SHELL import direction still need manual review because the correct answer depends on the repository's entrypoint layout.
+The CORE/SHELL checks apply to `src/core/**` by default:
+
+- CORE must not import from SHELL.
+- `Effect.runPromise`, `Effect.runSync`, and `Effect.runSyncExit` are shell/runtime-boundary only.
+- `catchAll`, casts, and `unknown` are blocked in CORE, except casts are allowed in `src/core/axioms.ts`.
+
+## Strict Format Profile
+
+Use `--profile strict-format` when formatting should be part of the gate:
+
+```bash
+bash "$SKILL_DIR/scripts/run-effect-ts-check.sh" <effect-source-paths> --profile strict-format
+```
+
+This runs `strict` plus the official `@effect/dprint` preset. Keep it separate from `strict` when you need actionable semantic findings without formatting noise.
+
+Runtime execution boundaries outside the default `src/core/**` / `src/shell/**` convention still need manual review because the correct answer depends on the repository's entrypoint layout.
 
 ## Editor Tooling Boundary
 
