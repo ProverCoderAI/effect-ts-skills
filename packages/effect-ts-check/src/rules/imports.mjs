@@ -55,3 +55,17 @@ export const effectRestrictedImportPatterns = Object.freeze([
     message: "Do not import from node:* directly. Use @effect/platform services.",
   },
 ]);
+
+export const effectCoreRestrictedImportPatterns = Object.freeze([
+  {
+    group: [
+      "../shell/**",
+      "../../shell/**",
+      "../../../shell/**",
+      "./shell/**",
+      "src/shell/**",
+      "shell/**",
+    ],
+    message: "CORE must not import from SHELL.",
+  },
+]);

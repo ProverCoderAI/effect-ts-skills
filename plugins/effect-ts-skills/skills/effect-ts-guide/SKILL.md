@@ -23,9 +23,15 @@ If the repository is mostly tooling, docs, or test fixtures for the checker itse
 bash "$SKILL_DIR/scripts/run-effect-ts-check.sh" <effect-source-paths> --profile strict
 ```
 
-4. Fix the violations that are machine-detectable.
-5. Apply the manual rules from the references for architecture and style decisions.
-6. Re-run the relevant check before finishing.
+4. If the repository wants the official Effect dprint formatting gate too, run:
+
+```bash
+bash "$SKILL_DIR/scripts/run-effect-ts-check.sh" <effect-source-paths> --profile strict-format
+```
+
+5. Fix the violations that are machine-detectable.
+6. Apply the manual rules from the references for architecture and style decisions.
+7. Re-run the relevant check before finishing.
 
 For editor integration tasks, treat `effect-ts-check` as the reusable CLI/compliance package and `@effect/language-service` plus VSCode settings/extensions as a separate setup concern.
 
@@ -42,7 +48,9 @@ The compliance check is for fast, repeatable signals:
 - `require`
 - common JavaScript and TypeScript module extensions, including `.jsx`, `.mts`, and `.cts`
 
-The `strict` profile also layers in unsafe host import checks, obvious typing-policy violations such as `any` and `ts-ignore`, unsupported casts, direct `fetch`, `catchAll`, and the official `@effect/eslint-plugin` preset for Effect-aware lint behavior.
+The `strict` profile also layers in unsafe host import checks, obvious typing-policy violations such as `any` and `ts-ignore`, direct `fetch`, eslint-disable hygiene, thrown-literal checks, and path-aware CORE boundary rules for casts, `unknown`, `catchAll`, CORE-to-SHELL imports, and runtime execution calls such as `Effect.runPromise` / `Effect.runSync`.
+
+The `strict-format` profile runs `strict` plus the official `@effect/dprint` formatting preset. Use it when formatting should be part of the compliance gate; use `strict` when you need semantic policy results without formatting noise.
 
 The wrapper uses `npx` with a bundled `effect-ts-check` tarball. It can run from a standalone skill install, but npm registry access or an npm cache is required for package dependencies.
 
@@ -56,7 +64,7 @@ The check does not replace architectural reasoning. Apply manual rules for:
 - boundary decoding with `@effect/schema`
 - resource safety with `Effect.acquireRelease` and `Effect.scoped`
 - exhaustive handling of unions
-- whether `Effect.runPromise`, `Effect.runSync`, and similar runtime execution calls are isolated to shell entrypoints
+- project-specific service factories, local package boundaries, and allowed runtime entrypoint layouts outside the default CORE/SHELL convention
 
 ## References
 

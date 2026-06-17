@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 
-import { minimal, strict } from "../src/index.mjs"
+import { minimal, strict, strictFormat } from "../src/index.mjs"
 import { lintSnippet } from "./helpers.mjs"
 
 test("minimal exports a flat config array", () => {
@@ -49,8 +49,22 @@ test("strict retains minimal syntax policy", async () => {
   assert.ok(result.messages.some((message) => message.ruleId === "no-restricted-syntax"))
 })
 
-test("strict includes additional effect-eslint preset layers", () => {
+test("strict adds additional compliance layers", () => {
   assert.ok(strict.length > minimal.length)
+})
+
+test("strict-format adds the effect dprint preset separately", () => {
+  assert.ok(strictFormat.length > strict.length)
+  assert.ok(
+    strictFormat.some((entry) =>
+      entry.rules && Object.hasOwn(entry.rules, "@effect/dprint")
+    )
+  )
+  assert.ok(
+    strict.every((entry) =>
+      !entry.rules || !Object.hasOwn(entry.rules, "@effect/dprint")
+    )
+  )
 })
 
 test("minimal leaves import and type policy to strict", async () => {
@@ -93,6 +107,108 @@ test("strict applies to common module extensions", async () => {
     assert.ok(ruleIds.includes("no-restricted-syntax"), `${filePath} should keep syntax checks`)
     assert.ok(ruleIds.includes("no-console"), `${filePath} should keep strict checks`)
   }
+})
+
+test("strict rejects eslint disable comments", async () => {
+  const [result] = await lintSnippet(
+    strict,
+    "/* eslint-disable no-console */\nconsole.log(1)\n",
+    "demo.ts"
+  )
+
+  const ruleIds = result.messages.map((message) => message.ruleId)
+
+  assert.ok(ruleIds.includes("eslint-comments/no-use"))
+})
+
+test("strict rejects direct fetch", async () => {
+  const [result] = await lintSnippet(
+    strict,
+    "fetch('https://example.com')\n",
+    "demo.ts"
+  )
+
+  assert.ok(result.messages.some((message) => message.ruleId === "no-restricted-syntax"))
+})
+
+test("strict rejects thrown literals without typed linting", async () => {
+  const [result] = await lintSnippet(
+    strict,
+    "throw 'BadError: failed'\n",
+    "demo.ts"
+  )
+
+  assert.ok(result.messages.some((message) => message.ruleId === "no-throw-literal"))
+})
+
+test("strict keeps runtime execution at shell boundaries", async () => {
+  const coreResult = await lintSnippet(
+    strict,
+    "Effect.runPromise(Effect.succeed(1))\n",
+    "src/core/program.ts"
+  )
+  const shellResult = await lintSnippet(
+    strict,
+    "Effect.runPromise(Effect.succeed(1))\n",
+    "src/shell/program.ts"
+  )
+
+  assert.ok(
+    coreResult[0].messages.some((message) => message.ruleId === "no-restricted-syntax")
+  )
+  assert.ok(
+    shellResult[0].messages.every((message) => message.ruleId !== "no-restricted-syntax")
+  )
+})
+
+test("strict blocks core imports from shell", async () => {
+  const [result] = await lintSnippet(
+    strict,
+    'import { service } from "../shell/service"\nexport { service }\n',
+    "src/core/usecase.ts"
+  )
+
+  assert.ok(result.messages.some((message) => message.ruleId === "no-restricted-imports"))
+})
+
+test("strict keeps casts inside the axioms boundary", async () => {
+  const coreResult = await lintSnippet(
+    strict,
+    "const value = input as string\n",
+    "src/core/usecase.ts"
+  )
+  const axiomsResult = await lintSnippet(
+    strict,
+    "const value = input as string\n",
+    "src/core/axioms.ts"
+  )
+
+  assert.ok(
+    coreResult[0].messages.some((message) => message.ruleId === "no-restricted-syntax")
+  )
+  assert.ok(
+    axiomsResult[0].messages.every((message) => message.ruleId !== "no-restricted-syntax")
+  )
+})
+
+test("strict keeps catchAll out of core while allowing outer handlers", async () => {
+  const coreResult = await lintSnippet(
+    strict,
+    "const handler = Effect.catchAll(() => Effect.succeed(1))\n",
+    "src/core/usecase.ts"
+  )
+  const apiResult = await lintSnippet(
+    strict,
+    "const handler = Effect.catchAll(() => Effect.succeed(1))\n",
+    "src/api/http.ts"
+  )
+
+  assert.ok(
+    coreResult[0].messages.some((message) => message.ruleId === "no-restricted-syntax")
+  )
+  assert.ok(
+    apiResult[0].messages.every((message) => message.ruleId !== "no-restricted-syntax")
+  )
 })
 
 test("minimal ignores nested tests and fixtures", async () => {

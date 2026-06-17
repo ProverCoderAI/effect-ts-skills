@@ -80,6 +80,23 @@ test("cli supports strict profile", () => {
   assert.match(result.stdout, /no-restricted-imports|@typescript-eslint\/no-explicit-any|no-console/)
 })
 
+test("cli supports strict-format profile", () => {
+  const fixture = writeTempFixture("pass.ts", "const value = 1;\nexport { value };\n")
+  const result = spawnSync(
+    process.execPath,
+    [cliPath, "--profile", "strict-format", fixture.path],
+    {
+      cwd: packageDir,
+      encoding: "utf8"
+    }
+  )
+  fixture.cleanup()
+
+  assert.equal(result.status, 0)
+  assert.equal(result.stdout, "")
+  assert.equal(result.stderr, "")
+})
+
 test("cli strict profile keeps minimal syntax checks", () => {
   const fixture = writeTempFixture(
     "fail.ts",
