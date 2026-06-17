@@ -1,0 +1,20 @@
+{
+  "name": "effect-ts-skills",
+  "interface": {
+    "displayName": "Effect TS Skills"
+  },
+  "plugins": [
+    {
+      "name": "effect-ts-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/effect-ts-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

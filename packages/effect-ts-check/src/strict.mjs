@@ -6,6 +6,7 @@ import {
   effectRestrictedImportPatterns,
   effectRestrictedImports,
   effectStrictSyntaxRestrictions,
+  effectSyntaxRestrictions,
   effectTypeRules,
 } from "./rules/index.mjs";
 
@@ -32,7 +33,11 @@ export const strict = [
           patterns: effectRestrictedImportPatterns,
         },
       ],
-      "no-restricted-syntax": ["error", ...effectStrictSyntaxRestrictions],
+      "no-restricted-syntax": [
+        "error",
+        ...effectSyntaxRestrictions,
+        ...effectStrictSyntaxRestrictions,
+      ],
       ...effectTypeRules,
     },
   },

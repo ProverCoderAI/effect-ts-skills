@@ -18,6 +18,7 @@ Only apply this skill when the task is explicitly Effect-related.
 - Avoid `async/await` in product logic.
 - Avoid `try/catch` except at boundaries where you immediately convert to typed errors.
 - Avoid raw `Promise` chains.
+- Keep `Effect.runPromise`, `Effect.runSync`, and similar runtime execution calls in shell entrypoints.
 
 ## Review Rules
 

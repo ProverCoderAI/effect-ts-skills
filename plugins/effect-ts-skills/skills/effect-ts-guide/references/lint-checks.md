@@ -5,12 +5,15 @@
 Run this first:
 
 ```bash
-bash scripts/run-effect-ts-check.sh .
+SKILL_DIR=<directory containing this SKILL.md>
+bash "$SKILL_DIR/scripts/run-effect-ts-check.sh" .
 ```
 
 Resolve `scripts/run-effect-ts-check.sh` relative to the skill directory. The wrapper resolves the bundled `effect-ts-check` tarball without assuming a specific install location such as `~/.codex`.
 
 If the repository is mostly tooling, docs, or test fixtures for the checker itself, run the command only against the relevant Effect source paths instead of `.`.
+
+The wrapper installs the bundled tarball through `npx --package`, so npm registry access or a warm npm cache is required for the package dependencies.
 
 ## Minimal Profile
 
@@ -21,19 +24,20 @@ The minimal profile should catch the high-signal Effect violations:
 - `try/catch`
 - `switch`
 - `require`
-- direct host imports that bypass Effect platform services
-- obvious unsafe typing policy violations
+- common JavaScript and TypeScript module extensions, including `.jsx`, `.mts`, and `.cts`
 
 ## Strict Profile
 
 The strict profile should add deeper policy checks:
 
 - the official `@effect/eslint-plugin` preset
-- shell-only boundaries for runtime execution
-- no direct CORE imports from SHELL
+- direct host imports that bypass Effect platform services
+- obvious unsafe typing policy violations
 - safer handling around casts and `unknown`
-- stricter host API restrictions
+- direct `fetch` and other host API restrictions
 - eslint comment hygiene
+
+Runtime execution boundaries such as `Effect.runPromise` and CORE/SHELL import direction still need manual review because the correct answer depends on the repository's entrypoint layout.
 
 ## Editor Tooling Boundary
 

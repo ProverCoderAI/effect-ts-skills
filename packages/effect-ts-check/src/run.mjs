@@ -81,7 +81,7 @@ export function printUsage() {
       "",
       "Profiles:",
       "  minimal  Default fast effect compliance check.",
-      "  strict   Adds import/type/runtime policy checks.",
+      "  strict   Adds import/type/host API policy checks.",
       "",
     ].join("\n"),
   );

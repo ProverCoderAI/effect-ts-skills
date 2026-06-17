@@ -11,14 +11,21 @@ description: Effect-TS guidance for architecture, typed errors, Layers, boundary
 2. Run the quick compliance check first:
 
 ```bash
-bash scripts/run-effect-ts-check.sh .
+SKILL_DIR=<directory containing this SKILL.md>
+bash "$SKILL_DIR/scripts/run-effect-ts-check.sh" .
 ```
 
 If the repository is mostly tooling, docs, or test fixtures for the checker itself, scope the command to the relevant Effect source directories instead of blindly linting the whole workspace.
 
-3. Fix the violations that are machine-detectable.
-4. Apply the manual rules from the references for architecture and style decisions.
-5. Re-run the check before finishing.
+3. For stricter product-code policy checks, run:
+
+```bash
+bash "$SKILL_DIR/scripts/run-effect-ts-check.sh" <effect-source-paths> --profile strict
+```
+
+4. Fix the violations that are machine-detectable.
+5. Apply the manual rules from the references for architecture and style decisions.
+6. Re-run the relevant check before finishing.
 
 For editor integration tasks, treat `effect-ts-check` as the reusable CLI/compliance package and `@effect/language-service` plus VSCode settings/extensions as a separate setup concern.
 
@@ -33,10 +40,11 @@ The compliance check is for fast, repeatable signals:
 - `try/catch` in product code
 - `switch`
 - `require`
-- unsafe host imports where Effect platform services should be used
-- obvious policy violations such as `any`, `ts-ignore`, or unsupported casts in strict areas
+- common JavaScript and TypeScript module extensions, including `.jsx`, `.mts`, and `.cts`
 
-The `strict` profile also layers in the official `@effect/eslint-plugin` preset for Effect-aware lint behavior.
+The `strict` profile also layers in unsafe host import checks, obvious typing-policy violations such as `any` and `ts-ignore`, unsupported casts, direct `fetch`, `catchAll`, and the official `@effect/eslint-plugin` preset for Effect-aware lint behavior.
+
+The wrapper uses `npx` with a bundled `effect-ts-check` tarball. It can run from a standalone skill install, but npm registry access or an npm cache is required for package dependencies.
 
 ## What Still Needs Judgment
 
@@ -48,6 +56,7 @@ The check does not replace architectural reasoning. Apply manual rules for:
 - boundary decoding with `@effect/schema`
 - resource safety with `Effect.acquireRelease` and `Effect.scoped`
 - exhaustive handling of unions
+- whether `Effect.runPromise`, `Effect.runSync`, and similar runtime execution calls are isolated to shell entrypoints
 
 ## References
 

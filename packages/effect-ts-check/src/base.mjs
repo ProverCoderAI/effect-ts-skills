@@ -2,7 +2,7 @@ import tseslint from "typescript-eslint";
 
 import { effectSyntaxRestrictions } from "./rules/index.mjs";
 
-export const effectFileGlobs = Object.freeze(["**/*.{js,mjs,cjs,ts,tsx}"]);
+export const effectFileGlobs = Object.freeze(["**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}"]);
 export const effectIgnoreGlobs = Object.freeze([
   "tests/**",
   "**/tests/**",
