@@ -16,14 +16,14 @@ The `effect-ts-guide` skill is intentionally kept inside the plugin. There is no
 
 ```bash
 codex plugin marketplace add ProverCoderAI/effect-ts-skills
-codex plugin add effect-ts-skills@effect-ts-skills
+codex plugin add ProverCoderAI@effect-ts-skills
 ```
 
 For local development from a checkout:
 
 ```bash
 codex plugin marketplace add .
-codex plugin add effect-ts-skills@effect-ts-skills
+codex plugin add ProverCoderAI@effect-ts-skills
 ```
 
 The repo marketplace entry points at `plugins/effect-ts-skills`, which is the canonical plugin directory.
