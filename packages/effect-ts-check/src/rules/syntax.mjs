@@ -55,18 +55,6 @@ export const effectStrictSyntaxRestrictions = Object.freeze([
     message: "Avoid catchAll that swallows typed errors; map or rethrow explicitly.",
   },
   {
-    selector: "CallExpression[callee.property.name='runSync']",
-    message: "Use Effect.runSync only at shell boundaries.",
-  },
-  {
-    selector: "CallExpression[callee.property.name='runSyncExit']",
-    message: "Use Effect.runSyncExit only at shell boundaries.",
-  },
-  {
-    selector: "CallExpression[callee.property.name='runPromise']",
-    message: "Use Effect.runPromise only at shell boundaries.",
-  },
-  {
     selector: "TSAsExpression",
     message: "Avoid casts in product code; keep them in one axioms boundary if needed.",
   },

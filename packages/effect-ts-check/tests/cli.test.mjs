@@ -80,6 +80,25 @@ test("cli supports strict profile", () => {
   assert.match(result.stdout, /no-restricted-imports|@typescript-eslint\/no-explicit-any|no-console/)
 })
 
+test("cli strict profile keeps minimal syntax checks", () => {
+  const fixture = writeTempFixture(
+    "fail.ts",
+    "async function demo() {\n  await Promise.resolve(1)\n}\n\ndemo()\n"
+  )
+  const result = spawnSync(
+    process.execPath,
+    [cliPath, "--profile", "strict", fixture.path],
+    {
+      cwd: packageDir,
+      encoding: "utf8"
+    }
+  )
+  fixture.cleanup()
+
+  assert.notEqual(result.status, 0)
+  assert.match(result.stdout, /no-restricted-syntax/)
+})
+
 test("cli rejects unknown profiles", () => {
   const result = spawnSync(process.execPath, [cliPath, "--profile", "weird"], {
     cwd: packageDir,
